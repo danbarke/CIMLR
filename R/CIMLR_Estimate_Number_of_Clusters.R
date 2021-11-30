@@ -207,7 +207,7 @@
     allk = seq(10,30,2)
     
     # setup a parallelized estimation of the kernels
-    if(cores == NULL) {
+    if(is.null(cores)) {
       cores = as.integer(cores.ratio * (detectCores() - 1))
       if (cores < 1 || is.na(cores) || is.null(cores)) {
         cores = 1
