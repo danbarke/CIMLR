@@ -28,7 +28,7 @@
 
         if(data_types==1) {
 
-            D_Kernels = multiple.kernel.numc(t(X),cores.ratio)
+            D_Kernels = multiple.kernel.numc(t(X),cores.ratio,cores)
             distX = array(0,c(dim(D_Kernels[[1]])[1],dim(D_Kernels[[1]])[2]))
             for (i in 1:length(D_Kernels)) {
                 distX = distX + D_Kernels[[i]]
@@ -40,7 +40,7 @@
         }
         else {
 
-            D_Kernels = c(D_Kernels,multiple.kernel.numc(t(X),cores.ratio))
+            D_Kernels = c(D_Kernels,multiple.kernel.numc(t(X),cores.ratio,cores))
             distX = array(0,c(dim(D_Kernels[[1]])[1],dim(D_Kernels[[1]])[2]))
             for (i in 1:length(D_Kernels)) {
                 distX = distX + D_Kernels[[i]]
@@ -184,7 +184,7 @@
 }
 
 # compute and returns the multiple kernel
-"multiple.kernel.numc" = function( x, cores.ratio = 1 ) {
+"multiple.kernel.numc" = function( x, cores.ratio = 1 , cores = NULL) {
     
     # set the parameters
     kernel.type = list()
@@ -207,9 +207,11 @@
     allk = seq(10,30,2)
     
     # setup a parallelized estimation of the kernels
-    cores = as.integer(cores.ratio * (detectCores() - 1))
-    if (cores < 1 || is.na(cores) || is.null(cores)) {
+    if(cores == NULL) {
+      cores = as.integer(cores.ratio * (detectCores() - 1))
+      if (cores < 1 || is.na(cores) || is.null(cores)) {
         cores = 1
+      }
     }
 
     cl = makeCluster(cores)

@@ -31,7 +31,7 @@
 #' @import Matrix
 #' @useDynLib CIMLR projsplx
 #'
-"CIMLR" <- function( X, c, no.dim = NA, k = 10, cores.ratio = 1 ) {
+"CIMLR" <- function( X, c, no.dim = NA, k = 10, cores.ratio = 1, cores = NULL ) {
     
     # set any required parameter to the defaults
     if(is.na(no.dim)) {
@@ -53,10 +53,10 @@
     for(data_types in 1:length(X)) {
         curr_X = X[[data_types]]
         if(data_types==1) {
-            D_Kernels = multiple.kernel.cimlr(t(curr_X),cores.ratio)
+            D_Kernels = multiple.kernel.cimlr(t(curr_X),cores.ratio,cores)
         }
         else {
-            D_Kernels = c(D_Kernels, multiple.kernel.cimlr(t(curr_X),cores.ratio))
+            D_Kernels = c(D_Kernels, multiple.kernel.cimlr(t(curr_X),cores.ratio,cores))
         }
     }
     

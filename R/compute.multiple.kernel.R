@@ -1,5 +1,5 @@
 # compute and returns the multiple kernel
-"multiple.kernel" = function( x, cores.ratio = 1 ) {
+"multiple.kernel" = function( x, cores.ratio = 1, cores = NULL) {
     
     # set the parameters
     kernel.type = list()
@@ -22,9 +22,11 @@
     allk = seq(10,30,2)
     
     # setup a parallelized estimation of the kernels
-    cores = as.integer(cores.ratio * (detectCores() - 1))
-    if (cores < 1 || is.na(cores) || is.null(cores)) {
+    if(cores == NULL) {
+      cores = as.integer(cores.ratio * (detectCores() - 1))
+      if (cores < 1 || is.na(cores) || is.null(cores)) {
         cores = 1
+      }
     }
 
     cl = makeCluster(cores)
